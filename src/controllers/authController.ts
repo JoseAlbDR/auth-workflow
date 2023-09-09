@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { ILoginRequest, IUserRequest } from "../types/authInterfaces";
 import { User } from "../models/User";
 import { StatusCodes } from "http-status-codes";
-import { attachCookiesToResponse } from "../utils";
+// import { attachCookiesToResponse } from "../utils";
 import { UnauthenticatedError } from "../errors";
-import { createTokenUser } from "../utils";
+// import { createTokenUser } from "../utils";
 
 export const registerController = async (req: IUserRequest, res: Response) => {
   const { name, email, password } = req.body;
@@ -46,11 +46,10 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
     throw new UnauthenticatedError("Invalid password");
   }
 
-  const tokenUser = createTokenUser(user);
+  if (!user.verified)
+    throw new UnauthenticatedError("Please verify your email");
 
-  attachCookiesToResponse({ res, user: tokenUser });
-
-  res.status(StatusCodes.OK).json({ user: tokenUser });
+  res.status(StatusCodes.OK).json({ user });
 };
 
 export const logoutController = (_req: Request, res: Response) => {
