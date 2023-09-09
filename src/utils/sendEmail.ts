@@ -1,25 +1,27 @@
 import nodemailer from "nodemailer";
+import { nodeMailerConfig } from "./nodemailerConfig";
+import { IMailArguments } from "../types/sendEmailInterfaces";
 
-export const sendEmail = async () => {
-  const testAccount = await nodemailer.createTestAccount();
+export const sendEmail = async ({ to, subject, html }: IMailArguments) => {
+  // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  // const msg = {
+  //   to: "yusepah@gmail.com",
+  //   from: "jaderodev@gmail.com",
+  //   subject: "Sending email from Node",
+  //   text: "Testing sendgrid",
+  //   html: "<strong>Html template</strong>",
+  // };
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    auth: {
-      user: "maudie.eichmann@ethereal.email",
-      pass: "kFa8G65zcBE7x8VHfT",
-    },
+  // const response = await sgMail.send(msg);
+  // console.log(response);
+  // const testAccount = await nodemailer.createTestAccount();
+  // console.log(testAccount);
+  const transporter = nodemailer.createTransport(nodeMailerConfig);
+
+  return transporter.sendMail({
+    from: '"J.Alberto Delgado" <jadero@gmail.com>', // sender address
+    to, // list of receivers
+    subject, // Subject line
+    html, // html body
   });
-
-  const info = await transporter.sendMail({
-    from: '"Fred Foo 👻" <foo@example.com>', // sender address
-    to: "user@user.com", // list of receivers
-    subject: "Testing Email ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Testing Email?</b>", // html body
-  });
-
-  console.log(testAccount);
-  console.log(info);
 };
