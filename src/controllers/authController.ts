@@ -65,8 +65,22 @@ export const logoutController = (_req: Request, res: Response) => {
   res.sendStatus(StatusCodes.OK);
 };
 
-export const verifyEmail = async (req: IVerifyEmailRequest, res: Response) => {
+export const verifyEmailController = async (
+  req: IVerifyEmailRequest,
+  res: Response
+) => {
   const { verificationToken, email } = req.body;
 
-  res.send("ok");
+  const user = await User.findOne({ email });
+
+  if (!user) throw new UnauthenticatedError(`${email} is not correct`);
+  if (verificationToken !== user.verificationToken)
+    throw new UnauthenticatedError(`Token not valid`);
+
+  user.isVerified = true;
+  user.verified = new Date();
+  user.verificationToken = "";
+  await user.save();
+
+  res.status(StatusCodes.OK).json({ msg: "Email verified" });
 };
