@@ -10,6 +10,7 @@ import { StatusCodes } from "http-status-codes";
 import crypto from "crypto";
 import { UnauthenticatedError } from "../errors";
 // import { createTokenUser } from "../utils";
+import { sendEmail } from "../utils/sendEmail";
 
 export const registerController = async (req: IUserRequest, res: Response) => {
   const { name, email, password } = req.body;
@@ -20,7 +21,7 @@ export const registerController = async (req: IUserRequest, res: Response) => {
 
   const verificationToken = crypto.randomBytes(40).toString("hex");
 
-  const newUser = await User.create({
+  await User.create({
     name,
     email,
     password,
@@ -28,11 +29,12 @@ export const registerController = async (req: IUserRequest, res: Response) => {
     verificationToken,
   });
 
+  await sendEmail();
+
   // send verification token back only while testing in postman
 
   res.status(StatusCodes.CREATED).json({
     msg: "Success! Please check your email to verify account",
-    verificationToken: newUser.verificationToken,
   });
 };
 
