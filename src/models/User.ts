@@ -44,7 +44,7 @@ UserSchema.pre("save", async function () {
   // UpdateUser with User.findOne() and User.save()
   // console.log(this.modifiedPaths());
   // console.log(this.isModified("password"));
-  // if (!this.isModified("password")) return
+  if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   const hashedPass = await bcrypt.hash(this.password, salt);
   this.password = hashedPass;
