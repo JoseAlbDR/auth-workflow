@@ -11,9 +11,9 @@
 
 #### Update Register Controller
 
-- [] setup fake verificationToken - 'fake token'
-- [] remove everything after User.create()
-- [] send back success message and token
+- [x] setup fake verificationToken - 'fake token'
+- [x] remove everything after User.create()
+- [x] send back success message and token
 
 #### Update Login Controller
 
