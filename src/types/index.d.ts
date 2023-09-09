@@ -21,6 +21,7 @@ declare global {
       JWT_SECRET: string;
       JWT_LIFETIME: string;
       STRIPE_API_KEY: string;
+      SENDGRID_API_KEY: string;
     }
   }
 }
