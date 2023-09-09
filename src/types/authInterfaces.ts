@@ -1,5 +1,5 @@
 import mongoose, { Model } from "mongoose";
-import { Response } from "express";
+import { Request, Response } from "express";
 
 export type IUserModel = Model<IUser, { [_ in never]: never }, IUserMethods>;
 
@@ -33,9 +33,18 @@ export interface IUser {
   verified: Date;
 }
 
+export interface IVerifyEmail {
+  verificationToken: string;
+  email: string;
+}
+
+export interface IVerifyEmailRequest extends Request {
+  body: IVerifyEmail;
+}
+
 export type Role = "admin" | "user";
 
-export interface IUserRequest {
+export interface IUserRequest extends Request {
   body: IUser;
 }
 
@@ -44,6 +53,6 @@ export interface ILogin {
   password: string;
 }
 
-export interface ILoginRequest {
+export interface ILoginRequest extends Request {
   body: ILogin;
 }
