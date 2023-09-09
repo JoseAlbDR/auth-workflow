@@ -28,6 +28,9 @@ export interface IUser {
   email: string;
   password: string;
   role: Role;
+  verificationToken: string;
+  isVerified: boolean;
+  verified: Date;
 }
 
 export type Role = "admin" | "user";
