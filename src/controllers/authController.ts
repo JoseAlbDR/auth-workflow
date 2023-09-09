@@ -1,8 +1,13 @@
 import { Request, Response } from "express";
-import { ILoginRequest, IUserRequest } from "../types/authInterfaces";
+import {
+  ILoginRequest,
+  IUserRequest,
+  IVerifyEmailRequest,
+} from "../types/authInterfaces";
 import { User } from "../models/User";
 import { StatusCodes } from "http-status-codes";
 // import { attachCookiesToResponse } from "../utils";
+import crypto from "crypto";
 import { UnauthenticatedError } from "../errors";
 // import { createTokenUser } from "../utils";
 
@@ -13,7 +18,7 @@ export const registerController = async (req: IUserRequest, res: Response) => {
   const isFirstAccount = (await User.countDocuments({})) === 0;
   const role = isFirstAccount ? "admin" : "user";
 
-  const verificationToken = "fake token";
+  const verificationToken = crypto.randomBytes(40).toString("hex");
 
   const newUser = await User.create({
     name,
@@ -58,4 +63,10 @@ export const logoutController = (_req: Request, res: Response) => {
     expires: new Date(Date.now()),
   });
   res.sendStatus(StatusCodes.OK);
+};
+
+export const verifyEmail = async (req: IVerifyEmailRequest, res: Response) => {
+  const { verificationToken, email } = req.body;
+
+  res.send("ok");
 };
