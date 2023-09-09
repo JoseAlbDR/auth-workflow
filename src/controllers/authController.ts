@@ -13,13 +13,22 @@ export const registerController = async (req: IUserRequest, res: Response) => {
   const isFirstAccount = (await User.countDocuments({})) === 0;
   const role = isFirstAccount ? "admin" : "user";
 
-  const newUser = await User.create({ name, email, password, role });
+  const verificationToken = "fake token";
 
-  const tokenUser = createTokenUser(newUser);
+  const newUser = await User.create({
+    name,
+    email,
+    password,
+    role,
+    verificationToken,
+  });
 
-  attachCookiesToResponse({ res, user: tokenUser });
+  // send verification token back only while testing in postman
 
-  res.status(StatusCodes.CREATED).json({ user: tokenUser });
+  res.status(StatusCodes.CREATED).json({
+    msg: "Success! Please check your email to verify account",
+    verificationToken: newUser.verificationToken,
+  });
 };
 
 export const loginController = async (req: ILoginRequest, res: Response) => {
