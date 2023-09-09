@@ -1,0 +1,63 @@
+{
+  "name": "jobs-api",
+  "version": "1.0.0",
+  "description": "Jobs API",
+  "main": "app.js",
+  "scripts": {
+    "tsc": "tsc",
+    "dev": "ts-node-dev --files src/app.ts",
+    "lint": "eslint --ext .ts ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoseAlbDR/jobs-api.git"
+  },
+  "author": "J.Alberto Delgado",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoseAlbDR/jobs-api/issues"
+  },
+  "homepage": "https://github.com/JoseAlbDR/jobs-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "express-fileupload": "^1.4.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.9.0",
+    "express-xss-sanitizer": "^1.1.6",
+    "helmet": "^7.0.0",
+    "http-status-codes": "^2.2.0",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
+    "moment": "^2.29.4",
+    "mongoose": "^7.4.3",
+    "morgan": "^1.10.0",
+    "rate-limiter": "^0.2.0",
+    "stripe": "^13.5.0",
+    "swagger-ui-express": "^5.0.0",
+    "validator": "^13.11.0",
+    "xss": "^1.0.14",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/express-fileupload": "^1.4.1",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/morgan": "^1.9.5",
+    "@types/swagger-ui-express": "^4.1.3",
+    "@types/validator": "^13.11.1",
+    "@types/yamljs": "^0.2.31",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  }
+}
