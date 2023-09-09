@@ -4,10 +4,10 @@
 
 #### Update User Model
 
-- [] add following three properties
-- [] verificationToken - String
-- [] isVerified - {type:Boolean, default:false}
-- [] verified - Date
+- [x] add following three properties
+- [x] verificationToken - String
+- [x] isVerified - {type:Boolean, default:false}
+- [x] verified - Date
 
 #### Update Register Controller
 
