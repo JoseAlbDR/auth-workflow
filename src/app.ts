@@ -10,7 +10,7 @@ import productsRouter from "./routes/productRoutes";
 import reviewsRouter from "./routes/reviewRoutes";
 import orderRouter from "./routes/orderRoutes";
 
-// import morgan from "morgan";
+import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 
@@ -36,7 +36,7 @@ app.use(cors());
 app.use(xss);
 app.use(mongoSanitize());
 
-// app.use(morgan("tiny"));
+app.use(morgan("tiny"));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.static("./src/public"));
