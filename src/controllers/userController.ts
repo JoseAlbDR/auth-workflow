@@ -13,6 +13,8 @@ import {
 } from "../errors";
 import { createTokenUser } from "../utils";
 import { attachCookiesToResponse, checkPermissions } from "../utils";
+import crypto from "crypto";
+import { Token } from "../models/Token";
 
 export const getAllUsers = async (_req: Request, res: Response) => {
   const users = await User.find({ role: "user" }).select("-password");
@@ -44,8 +46,15 @@ export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
   );
 
   if (updatedUser) {
+    const refreshToken = crypto.randomBytes(40).toString("hex");
+    const userAgent = req.headers["user-agent"];
+    const ip = req.ip;
+    const userToken = { refreshToken, ip, userAgent, user: req.user.userId };
     const tokenUser = createTokenUser(updatedUser);
-    attachCookiesToResponse({ res, user: tokenUser });
+
+    await Token.findOneAndUpdate({ user: userToken.user }, { userToken });
+
+    attachCookiesToResponse({ res, user: tokenUser, refreshToken });
     res.status(StatusCodes.OK).json({ user: tokenUser });
   }
 };
