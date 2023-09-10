@@ -13,12 +13,13 @@ export interface ITokenUser {
   role: Role;
 }
 
-export interface IPayloadUser {
+export interface IPayload {
   user: ITokenUser;
+  refreshToken?: string;
 }
 
 export interface ITokenUserPayload {
-  payload: IPayloadUser;
+  payload: IPayload;
 }
 
 export interface IAttachCookies {
