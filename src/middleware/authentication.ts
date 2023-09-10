@@ -1,22 +1,41 @@
 import { Request, Response, NextFunction } from "express";
 import { UnauthorizedError, UnauthenticatedError } from "../errors";
-import { isTokenValid } from "../utils";
-import { ITokenUser, Role } from "../types/authInterfaces";
+import { attachCookiesToResponse, isTokenValid } from "../utils";
+import { IPayload, Role } from "../types/authInterfaces";
+import { Token } from "../models/Token";
 const authenticateUser = async (
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction
 ) => {
-  const { token } = req.signedCookies as Record<string, string>;
-
-  if (!token) {
-    throw new UnauthenticatedError("Authentication invalid");
-  }
+  const { refreshToken, accessToken } = req.signedCookies as Record<
+    string,
+    string
+  >;
 
   try {
-    const payload = isTokenValid(token) as ITokenUser;
-    const { userId, name, role } = payload;
-    req.user = { userId, name, role };
+    if (accessToken) {
+      const payload = isTokenValid(accessToken) as IPayload;
+      req.user = payload.user;
+      return next();
+    }
+
+    const payload = isTokenValid(refreshToken) as IPayload;
+    const existingToken = await Token.findOne({
+      user: payload.user.userId,
+      refreshToken: payload.refreshToken,
+    });
+
+    if (!existingToken || !existingToken?.isValid) {
+      throw new UnauthenticatedError("Authentication Invalid");
+    }
+
+    attachCookiesToResponse({
+      res,
+      user: payload.user,
+      refreshToken: existingToken.refreshToken,
+    });
+    req.user = payload.user;
     next();
   } catch (error) {
     console.log(error);
