@@ -86,7 +86,11 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
   // Check for existing token
   const existingToken = await Token.findOne({ user: user._id });
 
-  if (existingToken?.isValid) {
+  if (existingToken) {
+    const { isValid } = existingToken;
+    if (!isValid) {
+      throw new UnauthenticatedError("Invalid Credentials");
+    }
     refreshToken = existingToken.refreshToken;
   } else {
     refreshToken = crypto.randomBytes(40).toString("hex");
