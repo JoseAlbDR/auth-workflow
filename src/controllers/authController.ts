@@ -84,13 +84,17 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
   let refreshToken = "";
 
   // Check for existing token
+  const existingToken = await Token.findOne({ user: user._id });
 
-  refreshToken = crypto.randomBytes(40).toString("hex");
-  const userAgent = req.headers["user-agent"];
-  const ip = req.ip;
-  const userToken = { refreshToken, ip, userAgent, user: user._id };
-
-  await Token.create(userToken);
+  if (existingToken?.isValid) {
+    refreshToken = existingToken.refreshToken;
+  } else {
+    refreshToken = crypto.randomBytes(40).toString("hex");
+    const userAgent = req.headers["user-agent"];
+    const ip = req.ip;
+    const userToken = { refreshToken, ip, userAgent, user: user._id };
+    await Token.create(userToken);
+  }
 
   attachCookiesToResponse({ res, user: tokenUser, refreshToken });
 
