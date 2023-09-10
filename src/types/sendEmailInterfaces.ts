@@ -3,3 +3,10 @@ export interface IMailArguments {
   subject: string;
   html: string;
 }
+
+export interface IVerificationEmail {
+  name: string;
+  email: string;
+  verificationToken: string;
+  origin: string;
+}
