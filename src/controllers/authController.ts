@@ -11,10 +11,11 @@ import crypto from "crypto";
 import { UnauthenticatedError } from "../errors";
 // import { createTokenUser } from "../utils";
 import {
-  attachCookiesToResponse,
+  // attachCookiesToResponse,
   createTokenUser,
   sendVerificationEmail,
 } from "../utils";
+import { Token } from "../models/Token";
 
 export const registerController = async (req: IUserRequest, res: Response) => {
   const { name, email, password } = req.body;
@@ -80,9 +81,20 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
 
   const tokenUser = createTokenUser(user);
 
-  attachCookiesToResponse({ res, user: tokenUser });
+  // Create refresh token
 
-  res.status(StatusCodes.OK).json({ user: tokenUser });
+  let refreshToken = "";
+
+  // Check for existing token
+
+  refreshToken = crypto.randomBytes(40).toString("hex");
+  const userAgent = req.headers["user-agent"];
+  const ip = req.ip;
+  const userToken = { refreshToken, ip, userAgent, user: user._id };
+  const token = await Token.create(userToken);
+  // attachCookiesToResponse({ res, user: tokenUser });
+
+  res.status(StatusCodes.OK).json({ user: tokenUser, token });
 };
 
 export const logoutController = (_req: Request, res: Response) => {
