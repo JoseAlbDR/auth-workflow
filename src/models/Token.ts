@@ -1,0 +1,26 @@
+import mongoose from "mongoose";
+
+const TokenSchema = new mongoose.Schema(
+  {
+    refresToken: {
+      type: String,
+      required: true,
+    },
+    ip: {
+      type: String,
+      required: true,
+    },
+    userAgent: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+export const Token = mongoose.model("Token", TokenSchema);
