@@ -6,12 +6,10 @@ import {
 } from "../types/authInterfaces";
 import { User } from "../models/User";
 import { StatusCodes } from "http-status-codes";
-// import { attachCookiesToResponse } from "../utils";
 import crypto from "crypto";
 import { UnauthenticatedError } from "../errors";
-// import { createTokenUser } from "../utils";
 import {
-  // attachCookiesToResponse,
+  attachCookiesToResponse,
   createTokenUser,
   sendVerificationEmail,
 } from "../utils";
@@ -91,10 +89,12 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
   const userAgent = req.headers["user-agent"];
   const ip = req.ip;
   const userToken = { refreshToken, ip, userAgent, user: user._id };
-  const token = await Token.create(userToken);
-  // attachCookiesToResponse({ res, user: tokenUser });
 
-  res.status(StatusCodes.OK).json({ user: tokenUser, token });
+  await Token.create(userToken);
+
+  attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 export const logoutController = (_req: Request, res: Response) => {
