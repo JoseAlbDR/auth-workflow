@@ -4,11 +4,11 @@ import { sendEmail } from "./sendEmail";
 export const sendVerificationEmail = async ({
   name,
   email,
-}: // verificationToken,
-// origin,
-IVerificationEmail) => {
-  const message =
-    "<p>Please confirm your email by clicking on the following link: </p>";
+  verificationToken,
+  origin,
+}: IVerificationEmail) => {
+  const verifyEmail = `${origin}/user/verify-email?token=${verificationToken}&email=${email}`;
+  const message = `<p>Please confirm your email by clicking on the following link: <a href=${verifyEmail}>Verify Email</a> </p>`;
 
   return sendEmail({
     to: email,
