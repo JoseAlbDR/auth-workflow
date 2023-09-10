@@ -14,10 +14,11 @@ export const isTokenValid = (token: string) =>
 
 export const attachCookiesToResponse = ({ res, user }: IAttachCookies) => {
   const token = createJWT({ payload: user });
-  const oneDay = 1000 * 60 * 60 * 24;
+  // const oneDay = 1000 * 60 * 60 * 24;
+  const fiveSeconds = 1000 * 5;
   res.cookie("token", token, {
     httpOnly: true,
-    expires: new Date(Date.now() + oneDay),
+    expires: new Date(Date.now() + fiveSeconds),
     secure: process.env.NODE_ENV === "production",
     signed: true,
   });
