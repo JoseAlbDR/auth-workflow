@@ -13,10 +13,10 @@ const router = express.Router();
 router.post("/login", validateBody(validateLogin), loginController);
 router.post("/register", registerController);
 router.post(
-  "/verifyEmail",
+  "/verify-email",
   validateBody(validateVerifyEmail),
   verifyEmailController
 );
-router.get("/logout", logoutController);
+router.delete("/logout", logoutController);
 
 export default router;
