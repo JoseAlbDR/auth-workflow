@@ -10,7 +10,11 @@ import { StatusCodes } from "http-status-codes";
 import crypto from "crypto";
 import { UnauthenticatedError } from "../errors";
 // import { createTokenUser } from "../utils";
-import { createTokenUser, sendVerificationEmail } from "../utils";
+import {
+  attachCookiesToResponse,
+  createTokenUser,
+  sendVerificationEmail,
+} from "../utils";
 
 export const registerController = async (req: IUserRequest, res: Response) => {
   const { name, email, password } = req.body;
@@ -75,6 +79,8 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
     throw new UnauthenticatedError("Please verify your email");
 
   const tokenUser = createTokenUser(user);
+
+  attachCookiesToResponse({ res, user: tokenUser });
 
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };
