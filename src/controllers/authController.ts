@@ -7,7 +7,7 @@ import {
 import { User } from "../models/User";
 import { StatusCodes } from "http-status-codes";
 import crypto from "crypto";
-import { UnauthenticatedError } from "../errors";
+import { BadRequestError, UnauthenticatedError } from "../errors";
 import {
   attachCookiesToResponse,
   createTokenUser,
@@ -141,10 +141,27 @@ export const verifyEmailController = async (
   res.status(StatusCodes.OK).json({ msg: "Email verified" });
 };
 
-export const forgotPassword = async (_req: Request, res: Response) => {
-  res.send("forgot password");
+export const forgotPassword = async (req: ILoginRequest, res: Response) => {
+  const { email } = req.body;
+
+  if (!email) throw new BadRequestError("Please provide a valid email");
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    user.passwordToken = crypto.randomBytes(70).toString("hex");
+    // send email
+
+    const tenMinutes = 1000 * 60 * 10;
+    user.passwordTokenExpirationDate = new Date(Date.now() + tenMinutes);
+    await user.save();
+  }
+
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "Please check your email for reset password link." });
 };
 
 export const resetPassword = async (_req: Request, res: Response) => {
-  res.send("forgot password");
+  res.send("reset password");
 };
