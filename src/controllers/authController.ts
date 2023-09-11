@@ -106,7 +106,7 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
 };
 
 export const logoutController = (_req: Request, res: Response) => {
-  res.cookie("token", "logout", {
+  res.cookie("refreshToken", "logout", {
     httpOnly: true,
     expires: new Date(Date.now()),
   });

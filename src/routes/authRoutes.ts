@@ -7,6 +7,7 @@ import {
 } from "../controllers/authController";
 import { validateBody } from "../middleware/joi-validation";
 import { validateLogin, validateVerifyEmail } from "../utils/joiValidation";
+import { authenticateUser } from "../middleware/authentication";
 
 const router = express.Router();
 
@@ -17,6 +18,6 @@ router.post(
   validateBody(validateVerifyEmail),
   verifyEmailController
 );
-router.delete("/logout", logoutController);
+router.delete("/logout", authenticateUser, logoutController);
 
 export default router;
