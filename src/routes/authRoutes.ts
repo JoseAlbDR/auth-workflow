@@ -1,8 +1,10 @@
 import express from "express";
 import {
+  forgotPassword,
   loginController,
   logoutController,
   registerController,
+  resetPassword,
   verifyEmailController,
 } from "../controllers/authController";
 import { validateBody } from "../middleware/joi-validation";
@@ -19,5 +21,7 @@ router.post(
   verifyEmailController
 );
 router.delete("/logout", authenticateUser, logoutController);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 export default router;
