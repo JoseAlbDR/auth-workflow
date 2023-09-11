@@ -37,6 +37,8 @@ export interface IUser {
   verificationToken: string;
   isVerified: boolean;
   verified: Date;
+  passwordToken: string;
+  passwordTokenExpirationDate: Date;
 }
 
 export interface IVerifyEmail {

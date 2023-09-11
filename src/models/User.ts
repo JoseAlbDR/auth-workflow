@@ -37,6 +37,12 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
     default: false,
   },
   verificationToken: String,
+  passwordToken: {
+    type: String,
+  },
+  passwordTokenExpirationDate: {
+    type: Date,
+  },
   verified: { type: Date },
 });
 
