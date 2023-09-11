@@ -37,13 +37,19 @@ export interface IUser {
   verificationToken: string;
   isVerified: boolean;
   verified: Date;
-  passwordToken: string;
-  passwordTokenExpirationDate: Date;
+  passwordToken: string | null;
+  passwordTokenExpirationDate: Date | null;
 }
 
 export interface IVerifyEmail {
   verificationToken: string;
   email: string;
+}
+
+export interface IResetPassword {
+  token: string;
+  email: string;
+  password: string;
 }
 
 export interface IVerifyEmailRequest extends Request {
@@ -63,4 +69,8 @@ export interface ILogin {
 
 export interface ILoginRequest extends Request {
   body: ILogin;
+}
+
+export interface IResetPasswordRequest extends Request {
+  body: IResetPassword;
 }

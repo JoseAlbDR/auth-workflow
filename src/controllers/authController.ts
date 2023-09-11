@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   ILoginRequest,
+  IResetPasswordRequest,
   IUserRequest,
   IVerifyEmailRequest,
 } from "../types/authInterfaces";
@@ -170,6 +171,32 @@ export const forgotPassword = async (req: ILoginRequest, res: Response) => {
     .json({ msg: "Please check your email for reset password link." });
 };
 
-export const resetPassword = async (_req: Request, res: Response) => {
-  res.send("reset password");
+export const resetPassword = async (
+  req: IResetPasswordRequest,
+  res: Response
+) => {
+  const { token, email, password } = req.body;
+
+  if (!token || !email || !password) {
+    throw new BadRequestError("Please provide all values");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    const currentDate = new Date();
+
+    if (
+      user.passwordToken === token &&
+      user.passwordTokenExpirationDate &&
+      user.passwordTokenExpirationDate > currentDate
+    ) {
+      user.password = password;
+      user.passwordToken = null;
+      user.passwordTokenExpirationDate = null;
+      await user.save();
+    }
+  }
+
+  res.status(StatusCodes.OK).send("reset password");
 };
