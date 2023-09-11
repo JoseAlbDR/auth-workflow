@@ -140,3 +140,11 @@ export const verifyEmailController = async (
 
   res.status(StatusCodes.OK).json({ msg: "Email verified" });
 };
+
+export const forgotPassword = async (_req: Request, res: Response) => {
+  res.send("forgot password");
+};
+
+export const resetPassword = async (_req: Request, res: Response) => {
+  res.send("forgot password");
+};
