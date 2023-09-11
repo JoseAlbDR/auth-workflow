@@ -105,11 +105,19 @@ export const loginController = async (req: ILoginRequest, res: Response) => {
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
-export const logoutController = (_req: Request, res: Response) => {
+export const logoutController = async (req: Request, res: Response) => {
+  await Token.findOneAndDelete({ user: req.user.userId });
+
   res.cookie("refreshToken", "logout", {
     httpOnly: true,
     expires: new Date(Date.now()),
   });
+
+  res.cookie("accessToken", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+
   res.sendStatus(StatusCodes.OK);
 };
 
