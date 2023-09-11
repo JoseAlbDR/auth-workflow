@@ -12,6 +12,7 @@ import {
   attachCookiesToResponse,
   createTokenUser,
   sendVerificationEmail,
+  sendResetPasswordEmail,
 } from "../utils";
 import { Token } from "../models/Token";
 
@@ -151,6 +152,13 @@ export const forgotPassword = async (req: ILoginRequest, res: Response) => {
   if (user) {
     user.passwordToken = crypto.randomBytes(70).toString("hex");
     // send email
+    const origin = "http://localhost:3000";
+    await sendResetPasswordEmail({
+      name: user.name,
+      email: user.email,
+      verificationToken: user.passwordToken,
+      origin,
+    });
 
     const tenMinutes = 1000 * 60 * 10;
     user.passwordTokenExpirationDate = new Date(Date.now() + tenMinutes);
